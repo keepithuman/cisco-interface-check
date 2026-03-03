@@ -92,6 +92,7 @@ def main():
     parser.add_argument("--device_ip", required=True, help="Target device IP")
     parser.add_argument("--device_type", default="cisco_ios", help="Netmiko device type")
     parser.add_argument("--interfaces", required=True, help="Comma-separated interface names")
+    parser.add_argument("--debug", action="store_true", help="Include raw command output in report")
     args = parser.parse_args()
 
     username = os.environ.get("DEVICE_USERNAME")
@@ -135,7 +136,7 @@ def main():
             parsed = parse_interface_output(output)
 
             has_errors = (parsed["input_errors"] + parsed["output_errors"] + parsed["crc_errors"]) > 0
-            report["interfaces"][intf] = {
+            intf_entry = {
                 "status": parsed["raw_status"],
                 "line_protocol": parsed["line_protocol"],
                 "speed": parsed["speed"],
@@ -149,6 +150,9 @@ def main():
                 },
                 "has_errors": has_errors,
             }
+            if args.debug:
+                intf_entry["raw_output"] = output
+            report["interfaces"][intf] = intf_entry
 
             if parsed["raw_status"] == "up":
                 report["summary"]["up"] += 1
