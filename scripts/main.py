@@ -92,7 +92,7 @@ def main():
     parser.add_argument("--device_ip", required=True, help="Target device IP")
     parser.add_argument("--device_type", default="cisco_ios", help="Netmiko device type")
     parser.add_argument("--interfaces", required=True, help="Comma-separated interface names")
-    parser.add_argument("--debug", action="store_true", help="Include raw command output in report")
+    parser.add_argument("--debug", default="false", help="Set to 'true' to include raw output")
     args = parser.parse_args()
 
     username = os.environ.get("DEVICE_USERNAME")
@@ -150,7 +150,7 @@ def main():
                 },
                 "has_errors": has_errors,
             }
-            if args.debug:
+            if args.debug.lower() == "true":
                 intf_entry["raw_output"] = output
             report["interfaces"][intf] = intf_entry
 

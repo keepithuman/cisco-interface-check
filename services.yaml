@@ -23,6 +23,10 @@ decorators:
         interfaces:
           type: string
           description: "Comma-separated interface names (e.g. GigabitEthernet0/1,Loopback0)"
+        debug:
+          type: string
+          description: "Set to 'true' to include raw command output in report"
+          default: "false"
 
 repositories:
   - name: cisco-interface-check-repo
