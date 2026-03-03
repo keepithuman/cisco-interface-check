@@ -32,7 +32,7 @@ secrets:
 
 repositories:
   - name: cisco-interface-check-repo
-    url: https://github.com/YOUR_ORG/cisco-interface-check.git
+    url: https://github.com/keepithuman/cisco-interface-check.git
     reference: main
     description: Cisco interface health check scripts
 
