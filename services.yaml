@@ -1,0 +1,59 @@
+decorators:
+  - name: cisco-interface-check-decorator
+    schema:
+      $id: root
+      $schema: https://json-schema.org/draft/2020-12/schema
+      type: object
+      required:
+        - device_ip
+        - interfaces
+      properties:
+        device_ip:
+          type: string
+          description: Target Cisco device IP address
+        device_type:
+          type: string
+          description: Netmiko device type
+          enum:
+            - cisco_ios
+            - cisco_nxos
+            - cisco_xe
+            - cisco_xr
+          default: cisco_ios
+        interfaces:
+          type: string
+          description: "Comma-separated interface names (e.g. GigabitEthernet0/1,Loopback0)"
+
+secrets:
+  - name: cisco-device-username
+    value: "REPLACE_VIA_IAGCTL_OR_VAULT"
+  - name: cisco-device-password
+    value: "REPLACE_VIA_IAGCTL_OR_VAULT"
+
+repositories:
+  - name: cisco-interface-check-repo
+    url: https://github.com/YOUR_ORG/cisco-interface-check.git
+    reference: main
+    description: Cisco interface health check scripts
+
+services:
+  - name: cisco-interface-check
+    type: python-script
+    description: Connects to a Cisco device, runs show interface commands, returns JSON health report
+    filename: main.py
+    working-directory: scripts
+    repository: cisco-interface-check-repo
+    decorator: cisco-interface-check-decorator
+    tags:
+      - cisco
+      - network
+      - health-check
+    secrets:
+      - name: cisco-device-username
+        type: env
+        target: DEVICE_USERNAME
+      - name: cisco-device-password
+        type: env
+        target: DEVICE_PASSWORD
+    runtime:
+      req-file: requirements.txt
