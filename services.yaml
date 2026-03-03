@@ -24,12 +24,6 @@ decorators:
           type: string
           description: "Comma-separated interface names (e.g. GigabitEthernet0/1,Loopback0)"
 
-secrets:
-  - name: cisco-device-username
-    value: "REPLACE_VIA_IAGCTL_OR_VAULT"
-  - name: cisco-device-password
-    value: "REPLACE_VIA_IAGCTL_OR_VAULT"
-
 repositories:
   - name: cisco-interface-check-repo
     url: https://github.com/keepithuman/cisco-interface-check.git

@@ -128,17 +128,10 @@ def main():
             "timeout": 30,
         }
         conn = ConnectHandler(**device)
-        prompt = conn.find_prompt()
-        # Escape the prompt for use as expect_string regex
-        prompt_pattern = re.escape(prompt)
 
         for intf in interfaces:
             cmd = f"show interface {intf}"
-            output = conn.send_command(
-                cmd,
-                expect_string=prompt_pattern,
-                read_timeout=30,
-            )
+            output = conn.send_command_timing(cmd, read_timeout=30)
             parsed = parse_interface_output(output)
 
             has_errors = (parsed["input_errors"] + parsed["output_errors"] + parsed["crc_errors"]) > 0
