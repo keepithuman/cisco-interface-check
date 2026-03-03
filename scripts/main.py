@@ -39,11 +39,12 @@ def parse_interface_output(raw: str) -> dict:
         "output_packets": 0,
     }
 
-    # Line 1: "GigabitEthernet0/1 is up, line protocol is up"
-    m = re.search(r"is (administratively )?(up|down), line protocol is (up|down)", raw)
+    # IOS: "GigabitEthernet0/1 is up, line protocol is up"
+    # IOS-XR: "GigabitEthernet0/0/0/0 is administratively down, line protocol is administratively down"
+    m = re.search(r"is (administratively )?(up|down), line protocol is (administratively )?(up|down)", raw)
     if m:
         info["raw_status"] = "admin-down" if m.group(1) else m.group(2)
-        info["line_protocol"] = m.group(3)
+        info["line_protocol"] = m.group(4)
 
     # Speed: "BW 1000000 Kbit/sec" or "100Mb/s"
     m = re.search(r"BW (\d+) Kbit", raw)
